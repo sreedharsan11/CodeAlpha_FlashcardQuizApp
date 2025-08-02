@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attempt Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2 id="quizTitle">Quiz</h2>
+    <div id="quizArea"></div>
+    <button onclick="submitQuiz()">Submit Quiz</button>
+    <p id="result"></p>
+    <br />
+    <a href="quiz.html"><button>Back</button></a>
+  </div>
+  <script>
+    const testName = localStorage.getItem("currentQuiz");
+    const quizzes = JSON.parse(localStorage.getItem("quizzes")) || {};
+    const quiz = quizzes[testName];
+
+    document.getElementById("quizTitle").textContent = `Test: ${testName}`;
+    const quizArea = document.getElementById("quizArea");
+
+    quiz.forEach((q, index) => {
+      quizArea.innerHTML += `
+        <p><b>Q${index + 1}: ${q.question}</b></p>
+        <input type="text" id="userAns${index}" /><br/><br/>
+      `;
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      quiz.forEach((q, i) => {
+        const userAns = document.getElementById(`userAns${i}`).value.trim().toLowerCase();
+        if (userAns === q.answer.toLowerCase()) score++;
+      });
+      document.getElementById("result").textContent = `Score: ${score}/${quiz.length}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Make a Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Create a New Quiz</h2>
+    <input type="text" id="testName" placeholder="Test Name" /><br />
+    <input type="number" id="totalQ" placeholder="Total Questions" /><br />
+    <div id="questionsContainer"></div>
+    <button onclick="generateQuestionInputs()">Generate Questions</button>
+    <button onclick="saveQuiz()">Save Quiz</button>
+    <br /><br />
+    <a href="quiz.html"><button>Back</button></a>
+  </div>
+  <script>
+    function generateQuestionInputs() {
+      const total = parseInt(document.getElementById("totalQ").value);
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
+      for (let i = 1; i <= total; i++) {
+        container.innerHTML += `
+          <input type="text" placeholder="Question ${i}" id="q${i}" /><br/>
+          <input type="text" placeholder="Answer ${i}" id="a${i}" /><br/><br/>
+        `;
+      }
+    }
+
+    function saveQuiz() {
+      const name = document.getElementById("testName").value.trim();
+      const total = parseInt(document.getElementById("totalQ").value);
+      if (!name || !total) return alert("Test name and number of questions required");
+
+      const quiz = [];
+      for (let i = 1; i <= total; i++) {
+        const q = document.getElementById(`q${i}`).value.trim();
+        const a = document.getElementById(`a${i}`).value.trim();
+        if (!q || !a) return alert(`Please fill Question ${i} and Answer`);
+        quiz.push({ question: q, answer: a });
+      }
+
+      const quizzes = JSON.parse(localStorage.getItem("quizzes")) || {};
+      quizzes[name] = quiz;
+      localStorage.setItem("quizzes", JSON.stringify(quizzes));
+      alert("Quiz saved!");
+      location.href = "quiz.html";
+    }
+  </script>
+</body>
+</html>

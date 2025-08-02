@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Take a Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Select a Quiz to Start</h2>
+    <div id="quizList"></div>
+    <br /><br />
+    <a href="quiz.html"><button>Back</button></a>
+  </div>
+  <script>
+    const quizzes = JSON.parse(localStorage.getItem("quizzes")) || {};
+    const quizList = document.getElementById("quizList");
+
+    if (Object.keys(quizzes).length === 0) {
+      quizList.innerHTML = "<p>No quizzes found.</p>";
+    } else {
+      for (let test in quizzes) {
+        const btn = document.createElement("button");
+        btn.textContent = test;
+        btn.onclick = () => {
+          localStorage.setItem("currentQuiz", test);
+          location.href = "attempt.html";
+        };
+        quizList.appendChild(btn);
+      }
+    }
+  </script>
+</body>
+</html>
